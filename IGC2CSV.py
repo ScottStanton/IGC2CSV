@@ -100,7 +100,7 @@ def logline_H(line, flight):
   try:
     headertypes[line[1:5]](line[5:], flight)
   except KeyError:
-    print "Header (not implemented): {}".format(line[1:])
+    print(f'Header (not implemented): {line[1:]}')
   return
 
 # Flight date header. This is the date that the FIRST B record was made on
@@ -108,7 +108,7 @@ def logline_H(line, flight):
 # (did we learn nothing from Y2K?)
 def logline_H_FDTE(line, flight):
   flight['flightdate'] = datetime.date(int(line[9:11])+2000, int(line[7:9]), int(line[5:7]))
-  print "Flight date: {}".format(flight['flightdate'])
+  print(f"Flight date: {flight['flightdate']}")
 
 
 def logline_I(line, flight):
@@ -127,13 +127,13 @@ def logline_B(line, flight):
     'pressure'  : int(line[25:30]),
     'alt-GPS'   : int(line[30:35]),
   })
-  for key, record in flight['optional_records'].iteritems():
+  for key, record in flight['optional_records'].items():
     flight['fixrecords'][-1]['opt_' +  key.lower()] = line[record[0]:record[1]]
 
   return
 
 def logline_NotImplemented(line, flight):
-  print "Record Type {} not implemented: {}".format(line[0:1], line[1:])
+  print(f'Record Type {line[0:1]} not implemented: {line[1:]}')
   return
 
   
@@ -205,8 +205,8 @@ def get_output_filename(inputfilename):
   return outputfilename
 
 if __name__ == "__main__":
-  print "Number of arguments: {}".format(len(sys.argv))
-  print "Argument List: {}".format(str(sys.argv))
+  print(f'Number of arguments: {len(sys.argv)}')
+  print(f'Argument List: {str(sys.argv)}')
 
   defaultoutputfields = [
     ('Datetime (UTC)', 'record', 'datetime'),
@@ -232,7 +232,7 @@ if __name__ == "__main__":
   fileparam = sys.argv[1]
   if os.path.isfile(fileparam):
     logbook.append({'igcfile': os.path.abspath(fileparam)})
-    print "Single IGC file supplied: {}".format(logbook[-1]['igcfile'])
+    print(f'Single IGC file supplied: {os.path.abspath(fileparam)}')
   elif os.path.isdir(fileparam):
     for filename in os.listdir(fileparam):
       fileabs = os.path.join(fileparam, filename)
@@ -243,10 +243,10 @@ if __name__ == "__main__":
       if ext.lower() == '.igc'.lower():
         logbook.append({'igcfile': os.path.abspath(fileabs)})
   else:
-    print 'Must indicate a file or directory to process'
+    print(f'Must indicate a file or directory to process')
     exit()
 
-  print "{} flights ready to process...".format(len(logbook))
+  print(f'{len(logbook)} flights ready to process...')
 
   # Parse all files
   for flight in logbook:
