@@ -1,3 +1,6 @@
+#
+# 2022-01-01 Modified to use python3 - ScottStanton
+#
 import sys
 import os
 import datetime
