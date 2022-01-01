@@ -107,7 +107,7 @@ def logline_H(line, flight):
 # Date format: DDMMYY
 # (did we learn nothing from Y2K?)
 def logline_H_FDTE(line, flight):
-  flight['flightdate'] = datetime.date(int(line[4:6])+2000, int(line[2:4]), int(line[0:2]))
+  flight['flightdate'] = datetime.date(int(line[9:11])+2000, int(line[7:9]), int(line[5:7]))
   print "Flight date: {}".format(flight['flightdate'])
 
 
