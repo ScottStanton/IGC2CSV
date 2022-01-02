@@ -11,10 +11,31 @@ The current version of IGC2CSV is a command-line tool that requires Python (test
 ## Usage
 You can specify either a single IGC file, or a directory full of IGC files:
 
-    python IGC2CSV.py /path/to/file.igc
-    python IGC2CSV.py /path/to/folder/with/igc/files/
+    python3 IGC2CSV.py /path/to/file.igc
+    python3 IGC2CSV.py /path/to/folder/with/igc/files/
 
 The CSV files will be output in the current working directory
+
+## CSV
+
+**Fields**
+    - DateTime: 
+    - Elapsed Time: 
+    - Latitude: 
+    - Longitude: 
+    - Altitude GPS: meters
+    - Distance Delta: meters
+    - Distance Total: meters
+    - Groundspeed: KPH
+    - Groundspeed Peak: KPH
+    - Altitude Delta GPS: 
+    - Altitude Delta Pressure: 
+    - Climb Speed: 
+    - Climb total: 
+    - Max Altitude (flight): 
+    - Min Altitude (flight): 
+    - Distance from Start (linear): Kilometers
+
 
 #DashWare
 Another purpose of this program is to put your flight logs in to a format that DashWare can understand, making it possible to create telemetry overlays on your flight videos.
