@@ -31,8 +31,8 @@ The CSV files will be output in the current working directory
 | Groundspeed Peak | KPH |
 | Altitude Delta GPS | Meters |
 | Altitude Delta Pressure | Meters |
-| Climb Speed | |
-| Climb total | |
+| Climb Speed | Meters/Second |
+| Climb total | Meters |
 | Max Altitude (flight) | Meters |
 | Min Altitude (flight) | Meters |
 | Distance from Start (linear) | Kilometers |
