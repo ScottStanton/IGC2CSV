@@ -18,26 +18,27 @@ The CSV files will be output in the current working directory
 
 ## CSV
 
-**Fields**
-    - DateTime: 
-    - Elapsed Time: 
-    - Latitude: 
-    - Longitude: 
-    - Altitude GPS: meters
-    - Distance Delta: meters
-    - Distance Total: meters
-    - Groundspeed: KPH
-    - Groundspeed Peak: KPH
-    - Altitude Delta GPS: 
-    - Altitude Delta Pressure: 
-    - Climb Speed: 
-    - Climb total: 
-    - Max Altitude (flight): 
-    - Min Altitude (flight): 
-    - Distance from Start (linear): Kilometers
+| Field Name | Units of Measure |
+| --- | --- |
+| DateTime | |
+| Elapsed Time | |
+| Latitude | |
+| Longitude | |
+| Altitude GPS | meters |
+| Distance Delta | meters |
+| Distance Total | meters |
+| Groundspeed | KPH |
+| Groundspeed Peak | KPH |
+| Altitude Delta GPS | |
+| Altitude Delta Pressure | |
+| Climb Speed | |
+| Climb total | |
+| Max Altitude (flight) | |
+| Min Altitude (flight) | |
+| Distance from Start (linear) | Kilometers |
 
 
-#DashWare
+# DashWare
 Another purpose of this program is to put your flight logs in to a format that DashWare can understand, making it possible to create telemetry overlays on your flight videos.
 
 [Example](http://www.youtube.com/watch?v=KKlZ1oOEYNI&hd=1)
