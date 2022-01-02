@@ -21,20 +21,20 @@ The CSV files will be output in the current working directory
 | Field Name | Units of Measure |
 | --- | --- |
 | DateTime | |
-| Elapsed Time | |
-| Latitude | |
-| Longitude | |
-| Altitude GPS | meters |
-| Distance Delta | meters |
-| Distance Total | meters |
+| Elapsed Time | Seconds |
+| Latitude | Degrees |
+| Longitude | Degrees |
+| Altitude GPS | Meters |
+| Distance Delta | Meters |
+| Distance Total | Meters |
 | Groundspeed | KPH |
 | Groundspeed Peak | KPH |
-| Altitude Delta GPS | |
-| Altitude Delta Pressure | |
+| Altitude Delta GPS | Meters |
+| Altitude Delta Pressure | Meters |
 | Climb Speed | |
 | Climb total | |
-| Max Altitude (flight) | |
-| Min Altitude (flight) | |
+| Max Altitude (flight) | Meters |
+| Min Altitude (flight) | Meters |
 | Distance from Start (linear) | Kilometers |
 
 
