@@ -16,26 +16,30 @@ You can specify either a single IGC file, or a directory full of IGC files:
 
 The CSV files will be output in the current working directory
 
+If you add the '-i' flag it will output values in imperial units instead of metric
+If the flag is left off then metric units will be used.
+
+
 ## CSV
 
-| Field Name | Units of Measure |
-| --- | --- |
-| DateTime | |
-| Elapsed Time | Seconds |
-| Latitude | Degrees |
-| Longitude | Degrees |
-| Altitude GPS | Meters |
-| Distance Delta | Meters |
-| Distance Total | Meters |
-| Groundspeed | KPH |
-| Groundspeed Peak | KPH |
-| Altitude Delta GPS | Meters |
-| Altitude Delta Pressure | Meters |
-| Climb Speed | Meters/Second |
-| Climb total | Meters |
-| Max Altitude (flight) | Meters |
-| Min Altitude (flight) | Meters |
-| Distance from Start (linear) | Kilometers |
+| Field Name | Metric | Imperial |
+| --- | --- | --- |
+| DateTime | | |
+| Elapsed Time | Seconds | Seconds |
+| Latitude | Degrees | Degrees |
+| Longitude | Degrees | Degrees |
+| Altitude GPS | Meters | Feet |
+| Distance Delta | Meters | Feet |
+| Distance Total | Meters | Feet |
+| Groundspeed | KPH | MPH |
+| Groundspeed Peak | KPH | MPH |
+| Altitude Delta GPS | Meters | Feet |
+| Altitude Delta Pressure | Meters | Feet |
+| Climb Speed | Meters/Second | Feet/Minute |
+| Climb total | Meters | Feet |
+| Max Altitude (flight) | Meters | Feet |
+| Min Altitude (flight) | Meters | Feet |
+| Distance from Start (linear) | Kilometers | Miles |
 
 
 # DashWare

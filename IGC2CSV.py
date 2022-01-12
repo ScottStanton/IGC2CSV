@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 #
 # 2022-01-01 Modified to use python3 - ScottStanton
 #
@@ -5,6 +6,7 @@ import sys
 import os
 import datetime
 from math import radians, cos, sin, asin, sqrt
+
 
 # Reads the IGC file and returns a flight dictionary
 def parse_igc(flight):
@@ -23,7 +25,7 @@ def parse_igc(flight):
   return flight
 
 # Adds a bunch of calculated fields to a flight dictionary
-def crunch_flight(flight):
+def crunch_flight_metric(flight):
   for index, record in enumerate(flight['fixrecords']):
     #thisdatetime = datetime.datetime.strptime(record['timestamp'], '')
     record['latdegrees'] = lat_to_degrees(record['latitude'])
@@ -56,6 +58,78 @@ def crunch_flight(flight):
       record['alt_gps_delta'] = record['alt-GPS'] - prevrecord['alt-GPS']
       record['alt_pressure_delta'] = record['pressure'] - prevrecord['pressure']
       record['climb_speed'] = record['alt_gps_delta'] / record['time_delta']
+      flight['climb_total'] += max(0, record['alt_gps_delta'])
+      record['climb_total'] = flight['climb_total']
+      flight['alt_peak'] = max(record['alt-GPS'], flight['alt_peak'])
+      flight['alt_floor'] = min(record['alt-GPS'], flight['alt_floor'])
+      if "TAS" in flight['optional_records']:
+        flight['tas_peak'] = max(record['opt_tas'], flight['tas_peak'])
+        record['tas_peak'] = flight['tas_peak']
+    else:
+      flight['time_start'] = record['time']
+      flight['datetime_start'] = datetime.datetime.combine(flight['flightdate'], flight['time_start'])
+      flight['altitude_start'] = record['alt-GPS']
+      flight['distance_total'] = 0
+      flight['climb_total'] = 0
+      flight['alt_peak'] = record['alt-GPS']
+      flight['alt_floor'] = record['alt-GPS']
+      flight['groundspeed_peak'] = 0
+  
+      record['date'] = flight['flightdate']
+      record['datetime'] = datetime.datetime.combine(record['date'], record['time'])
+      record['running_time'] = 0
+      record['time_delta'] = 0
+      record['distance_delta'] = 0
+      record['distance_total'] = 0
+      record['groundspeed'] = 0
+      record['groundspeed_peak'] = 0
+      record['alt_gps_delta'] = 0
+      record['alt_pressure_delta'] = 0
+      record['climb_speed'] = 0
+      record['climb_total'] = 0
+      record['distance_from_start'] = 0
+
+      if "TAS" in flight['optional_records']:
+        flight['tas_peak'] = record['opt_tas']
+        record['tas_peak'] = 0
+  
+  return flight
+
+
+def crunch_flight_imperial(flight):
+  for index, record in enumerate(flight['fixrecords']):
+    #thisdatetime = datetime.datetime.strptime(record['timestamp'], '')
+    record['latdegrees'] = lat_to_degrees(record['latitude'])
+    record['londegrees'] = lon_to_degrees(record['longitude'])
+
+    record['time'] = datetime.time(int(record['timestamp'][0:2]), int(record['timestamp'][2:4]), int(record['timestamp'][4:6]), 0, )
+
+    if index > 0:
+      prevrecord = flight['fixrecords'][index-1]
+
+      # Because we only know the date of the FIRST B record, we have to do some shaky logic to determine when we cross the midnight barrier
+      # There's a theoretical edge case here where two B records are separated by more than 24 hours causing the date to be incorrect
+      # But that's a problem with the IGC spec and we can't do much about it
+      if(record['time'] < prevrecord['time']):
+        # We crossed the midnight barrier, so increment the date
+        record['date'] = prevrecord['date'] + datetime.timedelta(days=1)
+      else:
+        record['date'] = prevrecord['date']
+
+      record['datetime'] = datetime.datetime.combine(record['date'], record['time'])
+      record['time_delta'] = (record['datetime'] - prevrecord['datetime']).total_seconds()
+      record['running_time'] = (record['datetime'] - flight['datetime_start']).total_seconds()
+      record['distance_delta'] = haversine(record['londegrees'], record['latdegrees'], prevrecord['londegrees'], prevrecord['latdegrees']) * 0.621371 #use Miles
+      flight['distance_total'] += record['distance_delta']
+      record['distance_total'] = flight['distance_total']
+      record['distance_from_start'] = straight_line_distance(record['londegrees'], record['latdegrees'], record['alt-GPS'], flight['fixrecords'][0]['londegrees'], flight['fixrecords'][0]['latdegrees'], flight['fixrecords'][0]['alt-GPS']) * 0.621371 #use Miles
+      record['groundspeed'] = record['distance_delta'] / record['time_delta'] * 3600 
+      flight['groundspeed_peak'] = max(record['groundspeed'], flight['groundspeed_peak'])
+      record['groundspeed_peak'] = flight['groundspeed_peak']
+      record['alt-GPS'] = record['alt-GPS'] * 3.28084 #use Feet
+      record['alt_gps_delta'] = record['alt-GPS'] - prevrecord['alt-GPS']
+      record['alt_pressure_delta'] = record['pressure'] - prevrecord['pressure']
+      record['climb_speed'] = ( record['alt_gps_delta'] / record['time_delta'] ) * 60 #use ft/min
       flight['climb_total'] += max(0, record['alt_gps_delta'])
       record['climb_total'] = flight['climb_total']
       flight['alt_peak'] = max(record['alt-GPS'], flight['alt_peak'])
@@ -211,6 +285,12 @@ if __name__ == "__main__":
   print(f'Number of arguments: {len(sys.argv)}')
   print(f'Argument List: {str(sys.argv)}')
 
+  if sys.argv[1]=='-i':
+    imperial = True
+    sys.argv[1] = sys.argv[2]
+  else:
+    imperial = False
+
   defaultoutputfields = [
     ('Datetime (UTC)', 'record', 'datetime'),
     ('Elapsed Time', 'record', 'running_time'),
@@ -257,7 +337,10 @@ if __name__ == "__main__":
 
   # Crunch the telemetry numbers on all of the flights
   for flight in logbook:
-    flight = crunch_flight(flight)
+    if imperial:
+      flight = crunch_flight_imperial(flight)
+    else:
+      flight = crunch_flight_metric(flight)
 
   # Output the CSV file for all flights
   for flight in logbook:
